@@ -1,11 +1,11 @@
 # nccsv
 
-nccsv - Ncurses CSV Editor
+nccsv - Ncurses CSV Editor written in Python
 
-## Install Dev
+## Install Dev (on windows)
 - $ python3 -m venv venv
 - $ . venv/bin/activate
-- (venv) $ pip install -r requirements.txt
+- (venv) $ pip install -r windows-curses
 
 ## Install Prod
 - tbd
