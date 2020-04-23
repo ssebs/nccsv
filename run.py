@@ -67,10 +67,18 @@ def render_editor(stdscr, filename, contents=None):
         contents[position_y]
     )
     box.edit(validate_enter_for_textbox)
-
+    box.gather()
     stdscr.refresh()
 
 # render_editor
+
+
+def render_editor_2(stdscr, filename, contents=None):
+    stdscr.clear()
+
+    stdscr.refresh()
+
+# render_editor_2
 
 
 def main(stdscr):
@@ -102,6 +110,12 @@ def main(stdscr):
                 stdscr.addstr(0, 0, "Opening {}".format(filename))
                 stdscr.refresh()
                 render_editor(stdscr, filename)
+            elif "Open" in menu[current_row]:
+                filename = render_filename_editor(stdscr)
+                stdscr.clear()
+                stdscr.addstr(0, 0, "Opening {}".format(filename))
+                stdscr.refresh()
+                render_editor_2(stdscr, filename)
             elif "Exit" in menu[current_row]:
                 break
 
