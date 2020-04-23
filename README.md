@@ -15,3 +15,27 @@ nccsv - Ncurses CSV Editor written in Python
   - (venv) $ python run.py [Filename]
 - Prod:
   - tbd
+
+## TODO:
+- [ ] Architecture
+  - [ ] Wireframes
+    - [ ] Home / Menu
+    - [ ] File selector
+      - [ ] Open
+      - [ ] Close
+    - [ ] Editor
+      - [ ] Layout Grid
+      - [ ] Entry
+- [ ] Multiple views
+  - [ ] Home / Menu
+  - [ ] File selector
+  - [ ] Editor
+- [ ] Custom widgets
+  - [ ] Layout Grid
+  - [ ] Entry (text editor with box)
+- [ ] Actually handle CSVs
+- [ ] Document
+- [ ] Tests
+
+## LICENSE
+[MIT](./LICENSE) &copy; 2020 Sebastian Safari
