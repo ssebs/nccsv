@@ -27,10 +27,10 @@ def validate_enter_for_textbox(x):
 
 def render_filename_editor(stdscr):
     stdscr.clear()
-    stdscr.addstr("Enter a filename (Hit CTRL + G to send)")
+    stdscr.addstr("Enter a filename (Hit ENTER to submit)")
 
-    editwin = curses.newwin(5, 30, 2, 1)
-    rectangle(stdscr, 1, 0, 1+5+1, 1+30+1)
+    editwin = curses.newwin(1, 30, 2, 1)
+    rectangle(stdscr, 1, 0, 1+1+1, 1+30+1)
     stdscr.refresh()
 
     box = Textbox(editwin)
@@ -44,16 +44,31 @@ def render_filename_editor(stdscr):
 def render_editor(stdscr, filename, contents=None):
     stdscr.clear()
 
+    position_x = 0
+    position_y = 0
+
     if contents is None:
-        contents = [[None for i in range(5)]for j in range(5)]
-    
-    for i, col in enumerate(contents):
-        for j, x in enumerate(contents[i]):
-            x = curses.newwin(1,30,j,1)
-            rectangle(stdscr, 1, 0, 1+j+1, 1+30+1)
-            stdscr.refresh()
-            box = Textbox(x)
-            box.edit(validate_enter_for_textbox)
+        contents = []
+        for x in range(5):
+            for y in range(5):
+                contents.append(
+                    curses.newwin(2, 10, y, x)
+                )
+                rectangle(stdscr, y*2, x*10, 2+(y*2), 10+(x*10))
+
+    stdscr.refresh()
+
+    key = stdscr.getch()
+    if key == curses.KEY_DOWN:
+        position_y += 1
+
+    # Handle editing / positioning
+    box = Textbox(
+        contents[position_y]
+    )
+    box.edit(validate_enter_for_textbox)
+
+    stdscr.refresh()
 
 # render_editor
 
@@ -87,6 +102,8 @@ def main(stdscr):
                 stdscr.addstr(0, 0, "Opening {}".format(filename))
                 stdscr.refresh()
                 render_editor(stdscr, filename)
+            elif "Exit" in menu[current_row]:
+                break
 
             stdscr.getch()
 
