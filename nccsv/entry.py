@@ -201,11 +201,15 @@ class Entry():
 
     def render(self):
         if self.is_highlighed:
-            rect(self.stdscr, abs(1-self.y), abs(1-self.x),
-                 self.size_y+self.y, self.size_x + self.x, True)
+            rect(self.stdscr,
+                 abs(1-self.y), abs(1-self.x),
+                 self.size_y+self.y, self.size_x + self.x,
+                 True)
         else:
-            rect(self.stdscr, abs(1-self.y), abs(1-self.x),
-                 self.size_y+self.y, self.size_x + self.x, False)
+            rect(self.stdscr,
+                 abs(1-self.y), abs(1-self.x),
+                 self.size_y+self.y, self.size_x + self.x,
+                 False)
         self.stdscr.refresh()
     # render
 

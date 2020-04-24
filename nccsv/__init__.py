@@ -90,21 +90,24 @@ def render_editor_2(stdscr, filename, contents=None):
                     stdscr, 1+(y*3), 2+(x*(w+(w//2))+2), h, w)
         stdscr.refresh()
 
+        contents[x_pos][y_pos].highlight()
+        stdscr.refresh()
+
         key = stdscr.getch()
 
         if key == curses.KEY_DOWN and y_pos < len(contents[0])-1:
             y_pos += 1
-        if key == curses.KEY_UP and y_pos > 0:
+        elif key == curses.KEY_UP and y_pos > 0:
             y_pos -= 1
-        if key == curses.KEY_RIGHT and x_pos < len(contents)-1:
+        elif key == curses.KEY_RIGHT and x_pos < len(contents)-1:
             x_pos += 1
-        if key == curses.KEY_LEFT and x_pos > 0:
+        elif key == curses.KEY_LEFT and x_pos > 0:
             x_pos -= 1
         elif key == ord("q"):
             break
-        # this should be a highlight, only edit on enter
-        contents[x_pos][y_pos].highlight()
-        contents[x_pos][y_pos].edit_entry()
+        elif key == curses.KEY_ENTER or key in [10, 13]:
+            contents[x_pos][y_pos].edit_entry()
+
         stdscr.refresh()
 
 # render_editor_2
@@ -155,3 +158,7 @@ def main(stdscr):
         render_menu(stdscr, current_row, menu)
         stdscr.refresh()
 # main
+
+
+if __name__ == "__main__":
+    curses.wrapper(main)
