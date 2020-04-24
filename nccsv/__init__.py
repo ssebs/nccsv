@@ -134,6 +134,7 @@ def main(stdscr):
                 stdscr.addstr(0, 0, "Opening {}".format(filename))
                 stdscr.refresh()
                 time.sleep(0.75)
+                break
                 # render_editor(stdscr, filename)
             elif "Open" in menu[current_row]:
                 filename = render_filename_editor(stdscr)
@@ -142,6 +143,7 @@ def main(stdscr):
                 stdscr.refresh()
                 time.sleep(0.75)
                 render_editor_2(stdscr, filename)
+                break
             elif "Exit" in menu[current_row]:
                 break
 
@@ -150,5 +152,3 @@ def main(stdscr):
         render_menu(stdscr, current_row, menu)
         stdscr.refresh()
 # main
-
-

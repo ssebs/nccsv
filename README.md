@@ -18,8 +18,8 @@ nccsv - Ncurses CSV Editor written in Python
 
 ## TODO:
 - [ ] Architecture
-  - [ ] Wireframes
-    - [ ] Home / Menu
+  - [x] Wireframes
+    - [x] Home / Menu
     - [ ] File selector
       - [ ] Open
       - [ ] Close
@@ -32,9 +32,10 @@ nccsv - Ncurses CSV Editor written in Python
   - [ ] Editor
 - [ ] Custom widgets
   - [ ] Layout Grid
-  - [ ] Entry (text editor with box)
+  - [x] Entry (text editor with box)
 - [ ] Actually handle CSVs
-- [ ] Document
+- [ ] Documentation
+- [ ] Publish to pip
 - [ ] Tests
 
 ## LICENSE
