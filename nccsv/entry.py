@@ -4,6 +4,9 @@ from curses.textpad import Textbox, rectangle
 
 
 class Entry():
+    """
+    Entry is a basic text editing box widget
+    """
     def __init__(self, stdscr, y, x, sizey, sizex, callback_on_enter=None):
         if x == 0:
             x = 1
