@@ -65,13 +65,39 @@ def render_editor_2(stdscr, filename, contents=None):
     stdscr.clear()
     h = 1
     w = 10
+    x_pos = 0
+    y_pos = 0
     if contents is None:
         contents = []
+        # Create 2d array
+        for i in range(5):
+            contents.append([])
+            for j in range(5):
+                contents[i].append([])
+        # Fill array
         for x in range(5):
             for y in range(5):
-                contents.append(Entry(stdscr, 1+(y*h), w+(x*w), 1, w))
-
+                contents[x][y] = Entry(stdscr, 1+(y*3), 2+(x*(w+(w//2))+2), h, w)
     stdscr.refresh()
+
+    while True:
+        for x in range(5):
+            for y in range(5):
+                contents[x][y] = Entry(stdscr, 1+(y*3), 2+(x*(w+(w//2))+2), h, w)
+        stdscr.refresh()
+        
+        key = stdscr.getch()
+        if key == curses.KEY_DOWN and y_pos < len(contents[0]):
+            y_pos += 1
+        if key == curses.KEY_UP and y_pos > 0:
+            y_pos -= 1
+        if key == curses.KEY_RIGHT and x_pos < len(contents):
+            x_pos += 1
+        if key == curses.KEY_LEFT and x_pos > 0:
+            x_pos -= 1
+        elif key == ord("q"):
+            break
+        contents[x_pos][y_pos].edit_entry()
 
 # render_editor_2
 
@@ -102,14 +128,14 @@ def main(stdscr):
                 stdscr.clear()
                 stdscr.addstr(0, 0, "Opening {}".format(filename))
                 stdscr.refresh()
-                time.sleep(1)
+                time.sleep(0.75)
                 # render_editor(stdscr, filename)
             elif "Open" in menu[current_row]:
                 filename = render_filename_editor(stdscr)
                 stdscr.clear()
                 stdscr.addstr(0, 0, "Opening {}".format(filename))
                 stdscr.refresh()
-                time.sleep(1)
+                time.sleep(0.75)
                 render_editor_2(stdscr, filename)
             elif "Exit" in menu[current_row]:
                 break

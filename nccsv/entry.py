@@ -13,6 +13,7 @@ class Entry():
         self.callback_on_enter = callback_on_enter
         self.has_edited = False
         self.text = None
+        self.is_highlighed = False
 
         # Create window w/ border
         #                        h       w    y  x
@@ -23,6 +24,10 @@ class Entry():
         # Render window
         stdscr.refresh()
         self.box = Textbox(editwin)
+
+        if self.is_highlighed:
+            stdscr.addstr(" ", curses.A_REVERSE)
+            stdscr.refresh()
 
         if self.has_edited:
             self.text = self.box.gather()
@@ -49,6 +54,9 @@ class Entry():
         else:
             return None
     # get_text
+
+    def highlight(self):
+        self.is_highlighed = True
 
     def validate_enter_for_textbox(self, x):
         if x == 10:
