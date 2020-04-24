@@ -77,26 +77,29 @@ def render_editor_2(stdscr, filename, contents=None):
         # Fill array
         for x in range(5):
             for y in range(5):
-                contents[x][y] = Entry(stdscr, 1+(y*3), 2+(x*(w+(w//2))+2), h, w)
+                contents[x][y] = Entry(
+                    stdscr, 1+(y*3), 2+(x*(w+(w//2))+2), h, w)
     stdscr.refresh()
 
     while True:
         for x in range(5):
             for y in range(5):
-                contents[x][y] = Entry(stdscr, 1+(y*3), 2+(x*(w+(w//2))+2), h, w)
+                contents[x][y] = Entry(
+                    stdscr, 1+(y*3), 2+(x*(w+(w//2))+2), h, w)
         stdscr.refresh()
-        
+
         key = stdscr.getch()
-        if key == curses.KEY_DOWN and y_pos < len(contents[0]):
+        if key == curses.KEY_DOWN and y_pos < len(contents[0])-1:
             y_pos += 1
         if key == curses.KEY_UP and y_pos > 0:
             y_pos -= 1
-        if key == curses.KEY_RIGHT and x_pos < len(contents):
+        if key == curses.KEY_RIGHT and x_pos < len(contents)-1:
             x_pos += 1
         if key == curses.KEY_LEFT and x_pos > 0:
             x_pos -= 1
         elif key == ord("q"):
             break
+        # this should be a highlight, only edit on enter
         contents[x_pos][y_pos].edit_entry()
 
 # render_editor_2
