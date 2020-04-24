@@ -9,30 +9,46 @@ class Entry():
             x = 1
         if y == 0:
             y = 1
+        self.stdscr = stdscr
+        self.callback_on_enter = callback_on_enter
+        self.has_edited = False
+        self.text = None
+
         # Create window w/ border
         #                        h       w    y  x
         editwin = curses.newwin(sizey, sizex, y, x)
         #                     y    x     hy       wx
         rectangle(stdscr, abs(1-y), abs(1-x), sizey+y, sizex + x)
 
-        curses.curs_set(1)
-
         # Render window
         stdscr.refresh()
-        box = Textbox(editwin)
-        box.edit(
+        self.box = Textbox(editwin)
+
+        if self.has_edited:
+            self.text = self.box.gather()
+    # init
+
+    def edit_entry(self):
+        curses.curs_set(1)
+        self.box.edit(
             self.validate_enter_for_textbox
         )
         curses.curs_set(0)
+        if self.callback_on_enter is not None:
+            self.callback_on_enter(self.stdscr, self.text)
 
-        self.text = box.gather()
+        self.has_edited = True
+        self.text = self.box.gather()
 
-        if callback_on_enter is not None:
-            callback_on_enter(stdscr, self.text)
-    # init
+        return self.box.gather()
+    # edit_entry
 
     def get_text(self):
-        return self.text
+        if self.has_edited:
+            return self.text
+        else:
+            return None
+    # get_text
 
     def validate_enter_for_textbox(self, x):
         if x == 10:

@@ -16,22 +16,15 @@ def render_menu(stdscr, selected_row, menu):
             stdscr.addstr(y, x, text)
 
     stdscr.refresh()
-
 # render_menu
-
-
-def validate_enter_for_textbox(x):
-    if x == 10:
-        return 7
-    return x
-# validate_enter_for_textbox
 
 
 def render_filename_editor(stdscr):
     stdscr.clear()
     stdscr.addstr("Enter a filename (Hit ENTER to submit)")
 
-    e = Entry(stdscr, 0, 0, 1, 15)
+    e = Entry(stdscr, 2, 0, 1, 15)
+    e.edit_entry()
     return e.get_text()
 # render_filename_editor
 
@@ -70,6 +63,13 @@ def render_editor(stdscr, filename, contents=None):
 
 def render_editor_2(stdscr, filename, contents=None):
     stdscr.clear()
+    h = 1
+    w = 10
+    if contents is None:
+        contents = []
+        for x in range(5):
+            for y in range(5):
+                contents.append(Entry(stdscr, 1+(y*h), w+(x*w), 1, w))
 
     stdscr.refresh()
 
