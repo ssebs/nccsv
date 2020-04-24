@@ -91,6 +91,7 @@ def render_editor_2(stdscr, filename, contents=None):
         stdscr.refresh()
 
         key = stdscr.getch()
+
         if key == curses.KEY_DOWN and y_pos < len(contents[0])-1:
             y_pos += 1
         if key == curses.KEY_UP and y_pos > 0:
@@ -102,7 +103,9 @@ def render_editor_2(stdscr, filename, contents=None):
         elif key == ord("q"):
             break
         # this should be a highlight, only edit on enter
+        contents[x_pos][y_pos].highlight()
         contents[x_pos][y_pos].edit_entry()
+        stdscr.refresh()
 
 # render_editor_2
 
@@ -133,7 +136,7 @@ def main(stdscr):
                 stdscr.clear()
                 stdscr.addstr(0, 0, "Opening {}".format(filename))
                 stdscr.refresh()
-                time.sleep(0.75)
+                time.sleep(0.5)
                 break
                 # render_editor(stdscr, filename)
             elif "Open" in menu[current_row]:
@@ -141,7 +144,7 @@ def main(stdscr):
                 stdscr.clear()
                 stdscr.addstr(0, 0, "Opening {}".format(filename))
                 stdscr.refresh()
-                time.sleep(0.75)
+                time.sleep(0.5)
                 render_editor_2(stdscr, filename)
                 break
             elif "Exit" in menu[current_row]:

@@ -179,26 +179,35 @@ class Entry():
         if y == 0:
             y = 1
         self.stdscr = stdscr
+        self.y = y
+        self.x = x
+        self.size_y = sizey
+        self.size_x = sizex
+        self.text = default_text
         self.callback_on_enter = callback_on_enter
         self.has_edited = False
-        self.text = default_text
         self.is_highlighed = False
 
         # Create window w/ border
-        editwin = curses.newwin(sizey, sizex, y, x)
-        if self.is_highlighed:
-            rect(stdscr, abs(1-y), abs(1-x), sizey+y, sizex + x, True)
-        else:
-            rect(stdscr, abs(1-y), abs(1-x), sizey+y, sizex + x, False)
+        self.editwin = curses.newwin(sizey, sizex, y, x)
+        self.render()
 
-        # Render window
-        stdscr.refresh()
         # self.box = Textbox(editwin)
-        self.box = MyTextBox(editwin)
+        self.box = MyTextBox(self.editwin)
 
         if self.has_edited:
             self.text = self.box.gather()
     # init
+
+    def render(self):
+        if self.is_highlighed:
+            rect(self.stdscr, abs(1-self.y), abs(1-self.x),
+                 self.size_y+self.y, self.size_x + self.x, True)
+        else:
+            rect(self.stdscr, abs(1-self.y), abs(1-self.x),
+                 self.size_y+self.y, self.size_x + self.x, False)
+        self.stdscr.refresh()
+    # render
 
     def edit_entry(self):
         curses.curs_set(1)
@@ -222,6 +231,7 @@ class Entry():
 
     def highlight(self):
         self.is_highlighed = True
+        self.render()
 
     def validate_enter_for_textbox(self, x):
         if x == 10:
@@ -244,6 +254,8 @@ if __name__ == "__main__":
         # Entry
         stdscr.clear()
         e = Entry(stdscr, 1, 1, 1, 10, callback_test)
+        e.edit_entry()
+        e.highlight()
         e.edit_entry()
 
         # stdscr.refresh()
