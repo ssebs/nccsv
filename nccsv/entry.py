@@ -4,10 +4,18 @@ from curses.textpad import Textbox, rectangle
 
 
 class Entry():
-    def __init__(self, stdscr, y, x, sizey, sizex, callback_on_enter):
+    def __init__(self, stdscr, y, x, sizey, sizex, callback_on_enter=None):
+        if x == 0:
+            x = 1
+        if y == 0:
+            y = 1
         # Create window w/ border
+        #                        h       w    y  x
         editwin = curses.newwin(sizey, sizex, y, x)
-        rectangle(stdscr, 1-y, 1-x, sizey+y, sizex + x)
+        #                     y    x     hy       wx
+        rectangle(stdscr, abs(1-y), abs(1-x), sizey+y, sizex + x)
+
+        curses.curs_set(1)
 
         # Render window
         stdscr.refresh()
@@ -15,8 +23,16 @@ class Entry():
         box.edit(
             self.validate_enter_for_textbox
         )
-        callback_on_enter(stdscr, box.gather())
+        curses.curs_set(0)
+
+        self.text = box.gather()
+
+        if callback_on_enter is not None:
+            callback_on_enter(stdscr, self.text)
     # init
+
+    def get_text(self):
+        return self.text
 
     def validate_enter_for_textbox(self, x):
         if x == 10:

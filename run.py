@@ -1,3 +1,5 @@
+from nccsv.entry import Entry
+import time
 import curses
 from curses.textpad import Textbox, rectangle
 
@@ -29,15 +31,8 @@ def render_filename_editor(stdscr):
     stdscr.clear()
     stdscr.addstr("Enter a filename (Hit ENTER to submit)")
 
-    editwin = curses.newwin(1, 30, 2, 1)
-    rectangle(stdscr, 1, 0, 1+1+1, 1+30+1)
-    stdscr.refresh()
-
-    box = Textbox(editwin)
-    box.edit(validate_enter_for_textbox)
-
-    return box.gather()
-
+    e = Entry(stdscr, 0, 0, 1, 15)
+    return e.get_text()
 # render_filename_editor
 
 
@@ -101,20 +96,20 @@ def main(stdscr):
             break
         elif key == curses.KEY_ENTER or key in [10, 13]:
             stdscr.clear()
-            stdscr.addstr(0, 0, "You pressed {}".format(menu[current_row]))
-            stdscr.refresh()
 
             if "New" in menu[current_row]:
                 filename = render_filename_editor(stdscr)
                 stdscr.clear()
                 stdscr.addstr(0, 0, "Opening {}".format(filename))
                 stdscr.refresh()
-                render_editor(stdscr, filename)
+                time.sleep(1)
+                # render_editor(stdscr, filename)
             elif "Open" in menu[current_row]:
                 filename = render_filename_editor(stdscr)
                 stdscr.clear()
                 stdscr.addstr(0, 0, "Opening {}".format(filename))
                 stdscr.refresh()
+                time.sleep(1)
                 render_editor_2(stdscr, filename)
             elif "Exit" in menu[current_row]:
                 break
