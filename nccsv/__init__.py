@@ -33,38 +33,6 @@ def render_filename_editor(stdscr):
 
 def render_editor(stdscr, filename, contents=None):
     stdscr.clear()
-
-    position_x = 0
-    position_y = 0
-
-    if contents is None:
-        contents = []
-        for x in range(5):
-            for y in range(5):
-                contents.append(
-                    curses.newwin(2, 10, y, x)
-                )
-                rectangle(stdscr, y*2, x*10, 2+(y*2), 10+(x*10))
-
-    stdscr.refresh()
-
-    key = stdscr.getch()
-    if key == curses.KEY_DOWN:
-        position_y += 1
-
-    # Handle editing / positioning
-    box = Textbox(
-        contents[position_y]
-    )
-    box.edit(validate_enter_for_textbox)
-    box.gather()
-    stdscr.refresh()
-
-# render_editor
-
-
-def render_editor_2(stdscr, filename, contents=None):
-    stdscr.clear()
     h = 1
     w = 10
     x_pos = 0
@@ -120,7 +88,7 @@ def render_editor_2(stdscr, filename, contents=None):
 
         stdscr.refresh()
 
-# render_editor_2
+# render_editor
 
 
 def main(stdscr):
@@ -147,18 +115,18 @@ def main(stdscr):
             if "New" in menu[current_row]:
                 filename = render_filename_editor(stdscr)
                 stdscr.clear()
-                stdscr.addstr(0, 0, "Opening {}".format(filename))
+                stdscr.addstr(0, 0, "Creating {}".format(filename))
                 stdscr.refresh()
                 time.sleep(0.5)
+                render_editor(stdscr, filename)
                 break
-                # render_editor(stdscr, filename)
             elif "Open" in menu[current_row]:
                 filename = render_filename_editor(stdscr)
                 stdscr.clear()
                 stdscr.addstr(0, 0, "Opening {}".format(filename))
                 stdscr.refresh()
                 time.sleep(0.5)
-                render_editor_2(stdscr, filename)
+                render_editor(stdscr, filename)
                 break
             elif "Exit" in menu[current_row]:
                 break
