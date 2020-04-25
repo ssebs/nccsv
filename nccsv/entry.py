@@ -194,23 +194,24 @@ class Entry():
 
         # self.box = Textbox(editwin)
         self.box = MyTextBox(self.editwin)
-
-        if self.has_edited:
-            self.text = self.box.gather()
     # init
 
     def render(self):
-        if self.is_highlighed:
-            rect(self.stdscr,
-                 abs(1-self.y), abs(1-self.x),
-                 self.size_y+self.y, self.size_x + self.x,
-                 True)
+        if self.text:
+            self.stdscr.addstr(self.y, self.x, self.text)
+            self.stdscr.refresh()
         else:
-            rect(self.stdscr,
-                 abs(1-self.y), abs(1-self.x),
-                 self.size_y+self.y, self.size_x + self.x,
-                 False)
-        self.stdscr.refresh()
+            if self.is_highlighed:
+                rect(self.stdscr,
+                     abs(1-self.y), abs(1-self.x),
+                     self.size_y+self.y, self.size_x + self.x,
+                     True)
+            else:
+                rect(self.stdscr,
+                     abs(1-self.y), abs(1-self.x),
+                     self.size_y+self.y, self.size_x + self.x,
+                     False)
+            self.stdscr.refresh()
     # render
 
     def edit_entry(self):
@@ -234,7 +235,7 @@ class Entry():
     # get_text
 
     def highlight(self):
-        self.is_highlighed = True
+        self.is_highlighed = not self.is_highlighed
         self.render()
 
     def validate_enter_for_textbox(self, x):

@@ -84,11 +84,12 @@ def render_editor_2(stdscr, filename, contents=None):
     stdscr.refresh()
 
     while True:
-        for x in range(5):
-            for y in range(5):
-                contents[x][y] = Entry(
-                    stdscr, 1+(y*3), 2+(x*(w+(w//2))+2), h, w)
-        stdscr.refresh()
+        stdscr.clear()
+        for x in range(len(contents)):
+            for y in range(len(contents[0])):
+                contents[x][y].render()
+
+        # stdscr.refresh()
 
         contents[x_pos][y_pos].highlight()
         stdscr.refresh()
@@ -96,17 +97,26 @@ def render_editor_2(stdscr, filename, contents=None):
         key = stdscr.getch()
 
         if key == curses.KEY_DOWN and y_pos < len(contents[0])-1:
+            contents[x_pos][y_pos].highlight()
             y_pos += 1
         elif key == curses.KEY_UP and y_pos > 0:
+            contents[x_pos][y_pos].highlight()
             y_pos -= 1
         elif key == curses.KEY_RIGHT and x_pos < len(contents)-1:
+            contents[x_pos][y_pos].highlight()
             x_pos += 1
         elif key == curses.KEY_LEFT and x_pos > 0:
+            contents[x_pos][y_pos].highlight()
             x_pos -= 1
         elif key == ord("q"):
             break
         elif key == curses.KEY_ENTER or key in [10, 13]:
             contents[x_pos][y_pos].edit_entry()
+            txt = contents[x_pos][y_pos].get_text()
+            # stdscr.clear()
+            # stdscr.addstr(0, 0, f"Entered: {txt}")
+            # stdscr.refresh()
+            # stdscr.getch()
 
         stdscr.refresh()
 
