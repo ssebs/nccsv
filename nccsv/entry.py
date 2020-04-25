@@ -198,19 +198,22 @@ class Entry():
 
     def render(self):
         if self.text:
-            self.stdscr.addstr(self.y, self.x, self.text)
-            self.stdscr.refresh()
-        else:
             if self.is_highlighed:
-                rect(self.stdscr,
-                     abs(1-self.y), abs(1-self.x),
-                     self.size_y+self.y, self.size_x + self.x,
-                     True)
+                self.stdscr.addstr(self.y, self.x, self.text, curses.A_REVERSE)
             else:
-                rect(self.stdscr,
-                     abs(1-self.y), abs(1-self.x),
-                     self.size_y+self.y, self.size_x + self.x,
-                     False)
+                self.stdscr.addstr(self.y, self.x, self.text)
+            self.stdscr.refresh()
+
+        if self.is_highlighed:
+            rect(self.stdscr,
+                 abs(1-self.y), abs(1-self.x),
+                 self.size_y+self.y, self.size_x + self.x,
+                 True)
+        else:
+            rect(self.stdscr,
+                 abs(1-self.y), abs(1-self.x),
+                 self.size_y+self.y, self.size_x + self.x,
+                 False)
             self.stdscr.refresh()
     # render
 
@@ -223,7 +226,7 @@ class Entry():
 
         self.has_edited = True
         self.text = self.box.get_text()
-
+        self.is_highlighed = False
         return self.box.get_text()
     # edit_entry
 
