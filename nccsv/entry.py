@@ -242,6 +242,7 @@ class Entry():
 
     def clear_text(self):
         self.text = None
+        self.has_edited = False
         # need to also clear the text box, and set the cursor
         # self.box = None
         del self.box

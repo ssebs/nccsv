@@ -36,11 +36,13 @@ nccsv - Ncurses CSV Editor written in Python
 - [ ] Scroll down / right
 - [.] Delete contents of cell when you hit "DEL"
 - [ ] Row / Col bars (A,B,C, 1,2,3)
-- [ ] Actually handle CSVs
+- [.] Actually handle CSVs
 - [ ] Color
 - [ ] Documentation
 - [ ] Publish to pip
 - [ ] Tests
+
+> Misc folder is for miscellaneous test files to add features (pad scrolling, etc)
 
 ## LICENSE
 [MIT](./LICENSE) &copy; 2020 Sebastian Safari
