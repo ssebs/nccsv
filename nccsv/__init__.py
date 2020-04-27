@@ -1,6 +1,7 @@
 # __init__.py
 
 from nccsv.entry import Entry
+from nccsv.csvutil import CSVData
 import time
 import curses
 from curses.textpad import Textbox, rectangle
@@ -31,30 +32,36 @@ def render_filename_editor(stdscr):
 # render_filename_editor
 
 
-def render_editor(stdscr, filename, contents=None):
+def render_editor(stdscr, filename, is_new_file=True):
     stdscr.clear()
     h = 1
     w = 10
     x_pos = 0
     y_pos = 0
-    if contents is None:
-        contents = []
-        # Create 2d array
-        for i in range(5):
-            contents.append([])
-            for j in range(5):
-                contents[i].append([])
-        # Fill array
+    if is_new_file:
+        csv_data = CSVData(filename)
+    else:
+        csv_data = CSVData(filename)
+        csv_data.load()
+
+    contents = []
+    # Create 2d array
+    for i in range(5):
+        contents.append([])
+        for j in range(5):
+            contents[i].append([])
+    # Fill array
+    for y in range(5):
         for x in range(5):
-            for y in range(5):
-                contents[x][y] = Entry(
-                    stdscr, 1+(y*3), 2+(x*(w+(w//2))+2), h, w)
+            contents[x][y] = Entry(
+                stdscr, 1+(y*3), 2+(x*(w+(w//2))+2), h, w)
     stdscr.refresh()
 
+    curses.raw()
     while True:
         stdscr.clear()
-        for x in range(len(contents)):
-            for y in range(len(contents[0])):
+        for y in range(len(contents)):
+            for x in range(len(contents[0])):
                 contents[x][y].render()
 
         # stdscr.refresh()
@@ -81,15 +88,19 @@ def render_editor(stdscr, filename, contents=None):
         elif key == curses.KEY_ENTER or key in [10, 13]:
             contents[x_pos][y_pos].edit_entry()
             txt = contents[x_pos][y_pos].get_text()
+            csv_data.update_data(contents)
             # stdscr.clear()
             # stdscr.addstr(0, 0, f"Entered: {txt}")
             # stdscr.refresh()
             # stdscr.getch()
         elif key == curses.KEY_DC or key == curses.KEY_DL:
             contents[x_pos][y_pos].clear_text()
+        elif key == 19:  # CTRL + S
+            csv_data.update_data(contents)
+            csv_data.save()
 
         stdscr.refresh()
-
+    curses.noraw()
 # render_editor
 
 
@@ -115,20 +126,20 @@ def main(stdscr):
             stdscr.clear()
 
             if "New" in menu[current_row]:
-                filename = render_filename_editor(stdscr)
+                filename = render_filename_editor(stdscr).strip()
                 stdscr.clear()
                 stdscr.addstr(0, 0, "Creating {}".format(filename))
                 stdscr.refresh()
                 time.sleep(0.5)
-                render_editor(stdscr, filename)
+                render_editor(stdscr, filename, True)
                 break
             elif "Open" in menu[current_row]:
-                filename = render_filename_editor(stdscr)
+                filename = render_filename_editor(stdscr).strip()
                 stdscr.clear()
                 stdscr.addstr(0, 0, "Opening {}".format(filename))
                 stdscr.refresh()
                 time.sleep(0.5)
-                render_editor(stdscr, filename)
+                render_editor(stdscr, filename, False)
                 break
             elif "Exit" in menu[current_row]:
                 break

@@ -259,6 +259,10 @@ class Entry():
         return x
     # validate_enter_for_textbox
 
+    def __repr__(self):
+        return self.text if self.text else ""
+    # repr
+
 # Entry
 
 
