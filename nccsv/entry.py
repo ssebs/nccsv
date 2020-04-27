@@ -237,6 +237,14 @@ class Entry():
             return None
     # get_text
 
+    def clear_text(self):
+        self.text = None
+        # need to also clear the text box, and set the cursor
+        self.box = None
+        self.box = MyTextBox(self.editwin)
+        self.highlight()
+    # clear_text
+
     def highlight(self):
         self.is_highlighed = not self.is_highlighed
         self.render()

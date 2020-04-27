@@ -85,6 +85,8 @@ def render_editor(stdscr, filename, contents=None):
             # stdscr.addstr(0, 0, f"Entered: {txt}")
             # stdscr.refresh()
             # stdscr.getch()
+        elif key == curses.KEY_DC or key == curses.KEY_DL:
+            contents[x_pos][y_pos].clear_text()
 
         stdscr.refresh()
 

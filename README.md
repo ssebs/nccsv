@@ -33,7 +33,11 @@ nccsv - Ncurses CSV Editor written in Python
 - [ ] Custom widgets
   - [ ] Layout Grid
   - [x] Entry (text editor with box)
+- [ ] Scroll down / right
+- [.] Delete contents of cell when you hit "DEL"
+- [ ] Row / Col bars (A,B,C, 1,2,3)
 - [ ] Actually handle CSVs
+- [ ] Color
 - [ ] Documentation
 - [ ] Publish to pip
 - [ ] Tests
