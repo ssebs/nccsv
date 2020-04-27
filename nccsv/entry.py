@@ -190,7 +190,10 @@ class Entry():
 
         # Create window w/ border
         self.editwin = curses.newwin(sizey, sizex, y, x)
-        self.render()
+        try:
+            self.render()
+        except curses.error as e:
+            raise Exception("Terminal not large enough")
 
         # self.box = Textbox(editwin)
         self.box = MyTextBox(self.editwin)
@@ -202,7 +205,6 @@ class Entry():
                 self.stdscr.addstr(self.y, self.x, self.text, curses.A_REVERSE)
             else:
                 self.stdscr.addstr(self.y, self.x, self.text)
-            self.stdscr.refresh()
 
         if self.is_highlighed:
             rect(self.stdscr,
@@ -214,7 +216,8 @@ class Entry():
                  abs(1-self.y), abs(1-self.x),
                  self.size_y+self.y, self.size_x + self.x,
                  False)
-            self.stdscr.refresh()
+
+        self.stdscr.refresh()
     # render
 
     def edit_entry(self):
@@ -240,7 +243,8 @@ class Entry():
     def clear_text(self):
         self.text = None
         # need to also clear the text box, and set the cursor
-        self.box = None
+        # self.box = None
+        del self.box
         self.box = MyTextBox(self.editwin)
         self.highlight()
     # clear_text
