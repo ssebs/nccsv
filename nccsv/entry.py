@@ -173,7 +173,7 @@ class Entry():
     """
 
     def __init__(self, stdscr, y, x, sizey, sizex,
-                 default_text=None, callback_on_enter=None):
+                 default_text=None, callback_on_enter=None, render_ops=None):
         if x == 0:
             x = 1
         if y == 0:
@@ -190,16 +190,18 @@ class Entry():
 
         # Create window w/ border
         self.editwin = curses.newwin(sizey, sizex, y, x)
-        try:
-            self.render()
-        except curses.error as e:
-            raise Exception("Terminal not large enough")
+        self.render(render_ops)
+
+        # try:
+        #     self.render()
+        # except curses.error as e:
+        #     raise Exception("Terminal not large enough")
 
         # self.box = Textbox(editwin)
         self.box = MyTextBox(self.editwin)
     # init
 
-    def render(self):
+    def render(self, render_ops=None):
         if self.text:
             if self.is_highlighed:
                 self.stdscr.addstr(self.y, self.x, self.text, curses.A_REVERSE)
@@ -217,7 +219,14 @@ class Entry():
                  self.size_y+self.y, self.size_x + self.x,
                  False)
 
-        self.stdscr.refresh()
+        if render_ops:
+            if self.x + render_ops["esx"] <= render_ops["w"]-1:
+                if self.y + render_ops["esy"] <= render_ops["h"]-1:
+                    self.stdscr.refresh(render_ops["py"], render_ops["px"],
+                                        self.y, self.x,
+                                        render_ops["h"] - 1, render_ops["w"] - 1)
+        else:
+            self.stdscr.refresh()
     # render
 
     def edit_entry(self):
