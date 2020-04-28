@@ -16,8 +16,8 @@ def main(stdscr):
     pad_pos_x = 0
 
     # These loops fill the pad with letters
-    for y in range(0, 99):
-        for x in range(0, 99):
+    for y in range(99):
+        for x in range(99):
             pad.addch(y, x, ord('a') + (x*x+y*y) % 26)
 
     # pad position y, x; win pos y, x; win h, w
