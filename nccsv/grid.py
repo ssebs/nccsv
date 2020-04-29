@@ -33,22 +33,24 @@ class Grid():
     # init
 
     def fill_grid(self):
-        # contents[0][0] = Entry(self.pad, 1, 1, 4, 10)
-        for y in range(self.size_y-1):
-            for x in range(self.size_x-1):
-                self.contents[x][y] = Entry(self.pad,
-                                            1+y, 2 + (x*self.e_size_x),
-                                            # (x*(self.w+(self.w//2))+2),
-                                            1, 10, render_ops={
-                                                "py": self.pos_y,
-                                                "px": self.pos_x,
-                                                "h": self.h,
-                                                "w": self.w,
-                                                "wpy": self.win_pos_y,
-                                                "wpx": self.win_pos_x,
-                                                "esy": self.e_size_y,
-                                                "esx": self.e_size_x
-                                            })
+        tmp_win = curses.newwin(self.h-1, self.w-1, 0, 0)
+        self.contents[0][0] = Entry(tmp_win, 0, 0, 4, 10)
+        tmp_win.refresh()
+        # for y in range(self.size_y-1):
+        #     for x in range(self.size_x-1):
+        #         self.contents[x][y] = Entry(self.pad,
+        #                                     1+y, 2 + (x*self.e_size_x),
+        #                                     # (x*(self.w+(self.w//2))+2),
+        #                                     1, 10, render_ops={
+        #                                         "py": self.pos_y,
+        #                                         "px": self.pos_x,
+        #                                         "h": self.h,
+        #                                         "w": self.w,
+        #                                         "wpy": self.win_pos_y,
+        #                                         "wpx": self.win_pos_x,
+        #                                         "esy": self.e_size_y,
+        #                                         "esx": self.e_size_x
+        #                                     })
     # fill_grid
 
     def render(self):
