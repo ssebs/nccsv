@@ -173,7 +173,7 @@ class Entry():
     """
 
     def __init__(self, stdscr, y, x, sizey, sizex,
-                 default_text=None, callback_on_enter=None, render_ops=None):
+                 default_text=None, callback_on_enter=None):
         if x == 0:
             x = 1
         if y == 0:
@@ -190,7 +190,7 @@ class Entry():
 
         # Create window w/ border
         self.editwin = curses.newwin(sizey, sizex, y, x)
-        self.render(render_ops)
+        self.render()
 
         # try:
         #     self.render()
@@ -201,7 +201,7 @@ class Entry():
         self.box = MyTextBox(self.editwin)
     # init
 
-    def render(self, render_ops=None):
+    def render(self):
         if self.text:
             if self.is_highlighed:
                 self.stdscr.addstr(self.y, self.x, self.text, curses.A_REVERSE)
@@ -219,26 +219,21 @@ class Entry():
                  self.size_y+self.y, self.size_x + self.x,
                  False)
 
-        if render_ops:
-            if self.x + render_ops["esx"] <= render_ops["w"]-1:
-                if self.y + render_ops["esy"] <= render_ops["h"]-1:
-                    self.stdscr.refresh(render_ops["py"], render_ops["px"],
-                                        self.y, self.x,
-                                        render_ops["h"] - 1, render_ops["w"] - 1)
-        else:
-            self.stdscr.refresh()
+        self.stdscr.refresh()
     # render
 
     def edit_entry(self):
         curses.curs_set(1)
         self.box.edit_text()
         curses.curs_set(0)
-        if self.callback_on_enter is not None:
-            self.callback_on_enter(self.stdscr, self.text)
 
         self.has_edited = True
         self.text = self.box.get_text()
         self.is_highlighed = False
+
+        if self.callback_on_enter is not None:
+            self.callback_on_enter(self.stdscr, self.text)
+
         return self.box.get_text()
     # edit_entry
 
@@ -287,20 +282,10 @@ if __name__ == "__main__":
 
         # Entry
         stdscr.clear()
-        e = Entry(stdscr, 1, 1, 1, 10, callback_test)
-        e.edit_entry()
-        e.highlight()
+        e = Entry(stdscr, 1, 1, 1, 10, callback_on_enter=callback_test)
         e.edit_entry()
 
-        # stdscr.refresh()
-
-        # MyTextBox
-        # tb = MyTextBox(stdscr)
-        # tb.edit_text()
-        # txt = tb.get_text()
-
-        # stdscr.addstr(1, 0, f"You said: {txt}")
-        # stdscr.refresh()
+        stdscr.refresh()
 
         stdscr.getch()
     # main
