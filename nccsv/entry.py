@@ -174,10 +174,10 @@ class Entry():
 
     def __init__(self, stdscr, y, x, sizey, sizex,
                  default_text=None, callback_on_enter=None):
-        if x == 0:
-            x = 1
-        if y == 0:
-            y = 1
+        # if x == 0:
+        #     x = 1
+        # if y == 0:
+        #     y = 1
         self.stdscr = stdscr
         self.y = y
         self.x = x
@@ -189,17 +189,44 @@ class Entry():
         self.is_highlighed = False
 
         # Create window w/ border
-        self.editwin = curses.newwin(sizey, sizex, y, x)
-        self.render()
+        self.container_win = stdscr.derwin(sizey+2, sizex+2, y, x)
+        self.editwin = self.container_win.derwin(sizey, sizex, 1, 1)
 
-        # try:
-        #     self.render()
-        # except curses.error as e:
-        #     raise Exception("Terminal not large enough")
+        self.render2()
 
-        # self.box = Textbox(editwin)
         self.box = MyTextBox(self.editwin)
     # init
+
+    def render2(self):
+        # test: y=1,x=1,h=1,w=10
+        if self.is_highlighed:
+            if self.text:
+                self.editwin.addstr(0, 0, self.text, curses.A_REVERSE)
+            else:
+                # self.editwin.addstr(0, 0, "N/A", curses.A_REVERSE)
+                pass
+            # reverse all the sides + corners
+            self.container_win.border(
+                curses.ACS_VLINE | curses.A_REVERSE,
+                curses.ACS_VLINE | curses.A_REVERSE,
+                curses.ACS_HLINE | curses.A_REVERSE,
+                curses.ACS_HLINE | curses.A_REVERSE,
+                curses.ACS_ULCORNER | curses.A_REVERSE,
+                curses.ACS_URCORNER | curses.A_REVERSE,
+                curses.ACS_LLCORNER | curses.A_REVERSE,
+                curses.ACS_LRCORNER | curses.A_REVERSE,
+            )
+        else:
+            if self.text:
+                self.editwin.addstr(0, 0, self.text)
+            else:
+                # self.editwin.addstr(0, 0, "N/A", curses.A_REVERSE)
+                pass
+            # reverse all the sides + corners
+            self.container_win.box()
+
+        self.container_win.refresh()
+    # render2
 
     def render(self):
         if self.text:
@@ -282,7 +309,7 @@ if __name__ == "__main__":
 
         # Entry
         stdscr.clear()
-        e = Entry(stdscr, 1, 1, 1, 10, callback_on_enter=callback_test)
+        e = Entry(stdscr, 0, 0, 1, 10, callback_on_enter=callback_test)
         e.edit_entry()
 
         stdscr.refresh()
