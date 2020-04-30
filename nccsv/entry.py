@@ -189,7 +189,7 @@ class Entry():
         self.is_highlighed = False
 
         # Create window w/ border
-        self.container_win = stdscr.derwin(sizey+2, sizex+2, y, x)
+        self.container_win = curses.newwin(sizey+2, sizex+2, y, x)
         self.editwin = self.container_win.derwin(sizey, sizex, 1, 1)
 
         self.render2()
@@ -283,7 +283,7 @@ class Entry():
 
     def highlight(self):
         self.is_highlighed = not self.is_highlighed
-        self.render()
+        self.render2()
 
     def validate_enter_for_textbox(self, x):
         if x == 10:
