@@ -16,6 +16,9 @@ nccsv - Ncurses CSV Editor written in Python
 - Prod:
   - tbd
 
+## Screenshots
+[![asciicast](https://asciinema.org/a/6gHETuFhyD4R9nAwtUGet5P9i.svg)](https://asciinema.org/a/6gHETuFhyD4R9nAwtUGet5P9i)
+
 ## TODO:
 - [ ] Architecture
   - [x] Wireframes
