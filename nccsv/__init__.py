@@ -25,6 +25,7 @@ def render_menu(stdscr, selected_row, menu):
 def render_filename_editor(stdscr):
     stdscr.clear()
     stdscr.addstr("Enter a filename (Hit ENTER to submit)")
+    stdscr.refresh()
 
     e = Entry(stdscr, 2, 0, 1, 15)
     e.edit_entry()

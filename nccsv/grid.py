@@ -29,7 +29,8 @@ class Grid():
         self.pos_y = 0
         self.pos_x = 0
 
-        self.pad = curses.newpad(self.size_y, self.size_x)
+        self.pad = curses.newpad(self.size_y*(self.e_size_y+5),
+                                 self.size_x*(self.e_size_x+5))
         self.fill_grid()
     # init
 
@@ -37,20 +38,23 @@ class Grid():
         for y in range(self.size_y):
             for x in range(self.size_x):
                 self.contents[x][y] = Entry(self.pad,
-                                            2 + (y*self.e_size_y*2),
-                                            2 + (x*self.e_size_x),
-                                            # (x*(self.w+(self.w//2))+2),
+                                            1 + (y*(self.e_size_y+2)),
+                                            1 + (x*(self.e_size_x+2)),
                                             1, 10)
     # fill_grid
 
     def render(self):
-        # self.stdscr.addstr(0, 0, f"{self.pos_x}{self.pos_y}")
-        # self.stdscr.refresh()
-        
+        self.pad.clear()
+        # self.pad.addstr(2, 0, f"{self.pos_x}{self.pos_y}")
+        # self.pad.refresh()
+
         self.contents[self.pos_x][self.pos_y].highlight()
         self.pad.refresh(self.pos_y, self.pos_x,
                          self.win_pos_y, self.win_pos_x,
                          self.h - self.y_offset-1, self.w - self.x_offset-1)
+        for y in range(self.size_y):
+            for x in range(self.size_x):
+                self.contents[x][y].render2()
     # render
 
     def add_row(self):
@@ -78,6 +82,10 @@ class Grid():
         elif key == ord('a') or key == curses.KEY_LEFT:
             self.contents[self.pos_x][self.pos_y].highlight()
             self.pos_x -= 1
+        elif key == curses.KEY_PPAGE:  # page up
+            self.win_pos_y += 1
+        elif key == curses.KEY_NPAGE:  # page down
+            self.win_pos_y -= 1
         elif key == ord('q'):
             raise Exception("App closed")
 
@@ -89,10 +97,10 @@ class Grid():
 if __name__ == "__main__":
     def main(stdscr):
         h, w = stdscr.getmaxyx()
-        stdscr.addstr(0, 0, "Grid test")
-        stdscr.refresh()
+        # stdscr.addstr(0, 0, "Grid test")
+        # stdscr.refresh()
 
-        g = Grid(stdscr, 6, 6, h, w, 1, 0, 0, 0, 1, 10)
+        g = Grid(stdscr, 20, 6, h, w, 1, 0, 0, 0, 1, 10)
         g.render()
         while True:
             # ch = stdscr.getch()

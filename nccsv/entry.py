@@ -174,10 +174,6 @@ class Entry():
 
     def __init__(self, stdscr, y, x, sizey, sizex,
                  default_text=None, callback_on_enter=None):
-        # if x == 0:
-        #     x = 1
-        # if y == 0:
-        #     y = 1
         self.stdscr = stdscr
         self.y = y
         self.x = x
