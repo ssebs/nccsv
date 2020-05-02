@@ -1,12 +1,14 @@
 # grid.py - render multiple entries in a pad
 import curses
-# from nccsv.entry import Entry
-from entry import Entry
+# from entry import Entry
+# from csvutil import CSVData
+from nccsv.entry import Entry
+from nccsv.csvutil import CSVData
 
 
 class Grid():
     def __init__(self, stdscr, size_y, size_x, h, w, win_pos_y, win_pos_x,
-                 y_offset, x_offset, e_size_y, e_size_x):
+                 y_offset, x_offset, e_size_y, e_size_x, csv_data):
         self.stdscr = stdscr
         self.size_y = size_y
         self.size_x = size_x
@@ -18,6 +20,7 @@ class Grid():
         self.x_offset = x_offset
         self.e_size_y = e_size_y
         self.e_size_x = e_size_x
+        self.csv_data = csv_data
 
         # Create 2D array for grid
         self.contents = []
@@ -68,6 +71,7 @@ class Grid():
     def handle_input(self, key=None):
         if not key:
             self.pad.keypad(True)
+            curses.raw(True)
             key = self.pad.getch()
         # TODO: check for min/max
         if key == ord('s') or key == curses.KEY_DOWN:
@@ -82,10 +86,19 @@ class Grid():
         elif key == ord('a') or key == curses.KEY_LEFT:
             self.contents[self.pos_x][self.pos_y].highlight()
             self.pos_x -= 1
-        elif key == curses.KEY_PPAGE:  # page up
+        elif key == curses.KEY_PPAGE or key == ord('k'):  # page up
             self.win_pos_y += 1
-        elif key == curses.KEY_NPAGE:  # page down
+        elif key == curses.KEY_NPAGE or key == ord('j'):  # page down
             self.win_pos_y -= 1
+        elif key == curses.KEY_ENTER or key in [10, 13]:
+            self.contents[self.pos_x][self.pos_y].edit_entry()
+            txt = self.contents[self.pos_x][self.pos_y].get_text()
+            self.csv_data.update_data(self.contents)
+        elif key == curses.KEY_DC or key == curses.KEY_DL:
+            self.contents[self.pos_x][self.pos_y].clear_text()
+        elif key == 19:  # CTRL + S
+            self.csv_data.update_data(self.contents)
+            self.csv_data.save()
         elif key == ord('q'):
             raise Exception("App closed")
 
@@ -100,7 +113,9 @@ if __name__ == "__main__":
         # stdscr.addstr(0, 0, "Grid test")
         # stdscr.refresh()
 
-        g = Grid(stdscr, 20, 6, h, w, 1, 0, 0, 0, 1, 10)
+        csv = CSVData("gridtest.csv")
+
+        g = Grid(stdscr, 20, 6, h, w, 1, 0, 0, 0, 1, 10, csv)
         g.render()
         while True:
             # ch = stdscr.getch()

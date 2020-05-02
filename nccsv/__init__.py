@@ -2,6 +2,7 @@
 
 from nccsv.entry import Entry
 from nccsv.csvutil import CSVData
+from nccsv.grid import Grid
 import time
 import curses
 from curses.textpad import Textbox, rectangle
@@ -105,6 +106,27 @@ def render_editor(stdscr, filename, is_new_file=True):
 # render_editor
 
 
+def render_editor2(stdscr, filename, is_new_file=True):
+    h, w = stdscr.getmaxyx()
+
+    if is_new_file:
+        csv_data = CSVData(filename)
+    else:
+        csv_data = CSVData(filename)
+        csv_data.load()
+
+    g = Grid(stdscr, 20, 6, h, w, 1, 0, 0, 0, 1, 10, csv_data)
+    g.render()
+    while True:
+        # ch = stdscr.getch()
+        # if ch == ord('q'):
+        #     break
+        g.render()
+        g.handle_input()
+    curses.noraw()
+# render_editor2
+
+
 def main(stdscr):
     curses.curs_set(0)
 
@@ -132,7 +154,7 @@ def main(stdscr):
                 stdscr.addstr(0, 0, "Creating {}".format(filename))
                 stdscr.refresh()
                 time.sleep(0.5)
-                render_editor(stdscr, filename, True)
+                render_editor2(stdscr, filename, True)
                 break
             elif "Open" in menu[current_row]:
                 filename = render_filename_editor(stdscr).strip()
@@ -140,7 +162,7 @@ def main(stdscr):
                 stdscr.addstr(0, 0, "Opening {}".format(filename))
                 stdscr.refresh()
                 time.sleep(0.5)
-                render_editor(stdscr, filename, False)
+                render_editor2(stdscr, filename, False)
                 break
             elif "Exit" in menu[current_row]:
                 break
