@@ -3,3 +3,6 @@ venv/
 __pycache__/
 !sample.csv
 *.csv
+build/
+dist/
+nccsv.egg-info/

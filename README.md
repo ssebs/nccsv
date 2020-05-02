@@ -3,18 +3,18 @@
 nccsv - Ncurses CSV Editor written in Python
 
 ## Install Dev (on windows)
-- $ python3 -m venv venv
-- $ . venv/bin/activate
-- (venv) $ pip install -r windows-curses
+- `$ python3 -m venv venv`
+- `$ . venv/bin/activate`
+- `(venv) $ pip install -r windows-curses`
 
 ## Install Prod
-- tbd
+- `$ pip install nccsv`
 
 ## Usage
 - Dev:
-  - (venv) $ python run.py [Filename]
+  - `(venv) $ python run.py [Filename]`
 - Prod:
-  - tbd
+  - `python -m nccsv`
 
 ## Screenshots
 [![asciicast](https://asciinema.org/a/6gHETuFhyD4R9nAwtUGet5P9i.svg)](https://asciinema.org/a/6gHETuFhyD4R9nAwtUGet5P9i)
