@@ -1,9 +1,9 @@
 # grid.py - render multiple entries in a pad
 import curses
-# from entry import Entry
-# from csvutil import CSVData
-from nccsv.entry import Entry
-from nccsv.csvutil import CSVData
+from entry import Entry
+from csvutil import CSVData
+# from nccsv.entry import Entry
+# from nccsv.csvutil import CSVData
 
 
 class Grid():
@@ -37,13 +37,20 @@ class Grid():
         self.fill_grid()
     # init
 
+    def do_refresh(self):
+        self.pad.refresh(self.pos_y, self.pos_x,
+                         self.win_pos_y, self.win_pos_x,
+                         self.h - self.y_offset-1, self.w - self.x_offset-1)
+    # do_refresh
+
     def fill_grid(self):
         for y in range(self.size_y):
             for x in range(self.size_x):
                 self.contents[x][y] = Entry(self.pad,
                                             1 + (y*(self.e_size_y+2)),
                                             1 + (x*(self.e_size_x+2)),
-                                            1, 10)
+                                            1, 10,
+                                            refresh_method=self.do_refresh)
     # fill_grid
 
     def render(self):
@@ -51,10 +58,8 @@ class Grid():
         # self.pad.addstr(2, 0, f"{self.pos_x}{self.pos_y}")
         # self.pad.refresh()
 
-        self.contents[self.pos_x][self.pos_y].highlight()
-        self.pad.refresh(self.pos_y, self.pos_x,
-                         self.win_pos_y, self.win_pos_x,
-                         self.h - self.y_offset-1, self.w - self.x_offset-1)
+        # self.contents[self.pos_x][self.pos_y].highlight()
+        self.do_refresh()
         for y in range(self.size_y):
             for x in range(self.size_x):
                 self.contents[x][y].render2()

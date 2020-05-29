@@ -37,8 +37,9 @@ class MyTextBox():
     MyTextBox is a basic text editor
     """
 
-    def __init__(self, win):
+    def __init__(self, win, refresh_method):
         self.win = win
+        self.refresh_method = refresh_method
         self.max_x = 0
         self.max_y = 0
         self.update_screen_size()
@@ -160,7 +161,8 @@ class MyTextBox():
                 continue
             if not self.handle_command(char):
                 break
-            self.win.refresh()
+            # self.win.refresh()
+            self.refresh_method()
         return self.get_text()
     # edit_text
 
@@ -173,6 +175,7 @@ class Entry():
     """
 
     def __init__(self, stdscr, y, x, sizey, sizex,
+                 refresh_method,
                  default_text=None, callback_on_enter=None):
         self.stdscr = stdscr
         self.y = y
@@ -183,14 +186,16 @@ class Entry():
         self.callback_on_enter = callback_on_enter
         self.has_edited = False
         self.is_highlighed = False
+        self.refresh_method = refresh_method
 
         # Create window w/ border
-        self.container_win = curses.newwin(sizey+2, sizex+2, y, x)
+        # self.container_win = curses.newwin(sizey+2, sizex+2, y, x)
+        self.container_win = self.stdscr.derwin(sizey+2, sizex+2, y, x)
         self.editwin = self.container_win.derwin(sizey, sizex, 1, 1)
 
         self.render2()
 
-        self.box = MyTextBox(self.editwin)
+        self.box = MyTextBox(self.editwin, self.refresh_method)
     # init
 
     def render2(self):
@@ -220,30 +225,8 @@ class Entry():
                 pass
             # reverse all the sides + corners
             self.container_win.box()
-
-        self.container_win.refresh()
+        self.refresh_method()
     # render2
-
-    def render(self):
-        if self.text:
-            if self.is_highlighed:
-                self.stdscr.addstr(self.y, self.x, self.text, curses.A_REVERSE)
-            else:
-                self.stdscr.addstr(self.y, self.x, self.text)
-
-        if self.is_highlighed:
-            rect(self.stdscr,
-                 abs(1-self.y), abs(1-self.x),
-                 self.size_y+self.y, self.size_x + self.x,
-                 True)
-        else:
-            rect(self.stdscr,
-                 abs(1-self.y), abs(1-self.x),
-                 self.size_y+self.y, self.size_x + self.x,
-                 False)
-
-        self.stdscr.refresh()
-    # render
 
     def edit_entry(self):
         curses.curs_set(1)
@@ -253,9 +236,6 @@ class Entry():
         self.has_edited = True
         self.text = self.box.get_text()
         self.is_highlighed = False
-
-        if self.callback_on_enter is not None:
-            self.callback_on_enter(self.stdscr, self.text)
 
         return self.box.get_text()
     # edit_entry
